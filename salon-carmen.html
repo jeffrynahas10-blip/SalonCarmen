@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Salon Carmen — Coiffure Féminine · Beyrouth</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Josefin+Sans:wght@200;300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#f7f1e8;--bg2:#ede4d6;--bg3:#e4d6c3;
+      --or:#b8893a;--or2:#d4a85a;
+      --brun:#5c3a1e;--text:#2e1f0e;--soft:#8a7060;
+      --white:#fdf9f4;--dark:#1e1208;
+    }
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'Josefin Sans',sans-serif;font-weight:300;overflow-x:hidden;cursor:none}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+      background:repeating-linear-gradient(112deg,transparent 0,transparent 120px,rgba(184,137,58,.04) 120px,rgba(184,137,58,.04) 121px),
+                 repeating-linear-gradient(22deg,transparent 0,transparent 160px,rgba(92,58,30,.03) 160px,rgba(92,58,30,.03) 161px)}
+
+    /* CURSEUR */
+    #cur{width:9px;height:9px;background:var(--or);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .3s,height .3s}
+    #ring{width:32px;height:32px;border:1px solid rgba(184,137,58,.5);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .1s,top .1s,width .3s,height .3s}
+
+    /* GLOBE LANGUE */
+    .lang-wrap{position:fixed;top:18px;right:18px;z-index:600}
+    .lang-globe{width:42px;height:42px;border-radius:50%;background:rgba(247,241,232,.2);backdrop-filter:blur(12px);border:1px solid rgba(184,137,58,.4);display:flex;align-items:center;justify-content:center;cursor:none;font-size:1.2rem;transition:all .3s}
+    .lang-globe:hover{border-color:var(--or);background:rgba(184,137,58,.15)}
+    .lang-dropdown{display:none;position:absolute;top:50px;right:0;background:var(--white);border:1px solid rgba(184,137,58,.2);box-shadow:0 16px 50px rgba(46,31,14,.13);min-width:150px}
+    .lang-wrap:hover .lang-dropdown{display:block}
+    .lang-opt{display:flex;align-items:center;gap:10px;width:100%;padding:13px 18px;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft);background:transparent;border:none;cursor:none;font-family:'Josefin Sans',sans-serif;transition:background .25s,color .25s;text-align:left}
+    .lang-opt:hover,.lang-opt.active{background:var(--bg2);color:var(--brun)}
+    .lang-opt.active{color:var(--or)}
+
+    /* NAV */
+    nav{position:fixed;top:0;width:100%;z-index:200;height:76px;padding:0 72px;display:flex;align-items:center;justify-content:space-between;background:rgba(247,241,232,.94);backdrop-filter:blur(20px);border-bottom:1px solid rgba(184,137,58,.16)}
+    .logo-wrap{display:flex;align-items:center;gap:14px;text-decoration:none}
+    .logo-text{display:flex;flex-direction:column;line-height:1.1}
+    .logo-top{font-family:'Josefin Sans',sans-serif;font-size:.72rem;letter-spacing:.36em;text-transform:uppercase;color:var(--soft)}
+    .logo-main{font-family:'Cormorant Garamond',serif;font-size:1.78rem;font-weight:400;font-style:italic;color:var(--brun);letter-spacing:.05em}
+    nav ul{list-style:none;display:flex;gap:42px}
+    nav ul a{text-decoration:none;color:var(--soft);font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;transition:color .3s}
+    nav ul a:hover{color:var(--or)}
+
+    /* HERO */
+    .hero{min-height:100vh;display:grid;grid-template-columns:54% 46%;position:relative;overflow:hidden}
+    .hero-left{display:flex;flex-direction:column;justify-content:center;padding:130px 72px 80px 100px;position:relative;z-index:2}
+    .eyebrow{font-size:.64rem;letter-spacing:.42em;text-transform:uppercase;color:var(--or);margin-bottom:28px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeUp .9s .2s forwards}
+    .eyebrow::before{content:'';width:30px;height:1px;background:var(--or)}
+    h1{font-family:'Cormorant Garamond',serif;font-size:clamp(3.4rem,5.6vw,6.2rem);font-weight:300;line-height:1.06;color:var(--text);opacity:0;animation:fadeUp .9s .4s forwards}
+    h1 em{font-style:italic;color:var(--or)}
+    .hero-rule{width:52px;height:1px;background:linear-gradient(to right,var(--or),var(--or2));margin:38px 0;opacity:0;animation:growLine .9s .62s forwards}
+    .hero-sub{font-size:.82rem;letter-spacing:.12em;line-height:2.1;color:var(--soft);max-width:340px;opacity:0;animation:fadeUp .9s .78s forwards}
+    .hero-femme{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-style:italic;color:var(--or);margin-top:28px;letter-spacing:.08em;opacity:0;animation:fadeUp .9s 1s forwards}
+    .hero-right{position:relative;overflow:hidden}
+    .marble-panel{position:absolute;inset:0;background:linear-gradient(148deg,#e8d8c2 0%,#d5c0a0 30%,#c8ad88 60%,#daccb0 100%);opacity:0;animation:fadeIn 1.4s .3s forwards}
+    .marble-panel::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-32deg,transparent 0,transparent 70px,rgba(255,255,255,.2) 70px,rgba(255,255,255,.2) 72px,transparent 72px,transparent 140px),repeating-linear-gradient(58deg,transparent 0,transparent 110px,rgba(255,255,255,.1) 110px,rgba(255,255,255,.1) 111px)}
+    .marble-panel::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:340px;height:340px;border-radius:50%;border:1px solid rgba(184,137,58,.2);box-shadow:0 0 0 60px rgba(184,137,58,.06),0 0 0 120px rgba(184,137,58,.03)}
+    .panel-monogram{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Cormorant Garamond',serif;font-size:9rem;font-style:italic;font-weight:300;color:rgba(92,58,30,.14);animation:breathe 6s ease-in-out infinite;z-index:2}
+    .scroll-hint{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;font-size:.58rem;letter-spacing:.32em;text-transform:uppercase;color:var(--soft);opacity:0;animation:fadeIn 1s 2s forwards}
+    .scroll-line{width:1px;height:42px;background:linear-gradient(to bottom,var(--or),transparent);animation:scrollPulse 2.2s ease-in-out infinite}
+
+    /* TICKER */
+    .ticker{background:var(--brun);padding:16px 0;overflow:hidden}
+    .ticker-inner{display:flex;width:max-content;animation:tickerRoll 45s linear infinite}
+    .t-item{font-family:'Cormorant Garamond',serif;font-size:.92rem;font-style:italic;color:rgba(253,249,244,.65);letter-spacing:.08em;white-space:nowrap;padding:0 52px}
+
+    /* SHARED */
+    .s-eyebrow{font-size:.62rem;letter-spacing:.38em;text-transform:uppercase;color:var(--or);display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    .s-eyebrow::before{content:'';width:22px;height:1px;background:var(--or)}
+    .s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,3.2vw,3rem);font-weight:300;line-height:1.15;color:var(--text)}
+    .s-title em{font-style:italic;color:var(--brun)}
+
+    /* SERVICES — 6 grandes catégories */
+    .services{padding:110px 100px;background:var(--white);position:relative}
+    .services::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--bg3),var(--or2),var(--bg3))}
+    .svc-hd{margin-bottom:60px}
+    .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+
+    .svc{background:var(--bg);padding:42px 36px;position:relative;overflow:hidden;transition:background .4s,transform .4s,box-shadow .4s;cursor:none}
+    .svc::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:linear-gradient(to right,var(--brun),var(--or));transition:width .5s}
+    .svc:hover{background:var(--white);transform:translateY(-5px);box-shadow:0 20px 56px rgba(92,58,30,.1)}
+    .svc:hover::after{width:100%}
+    .svc-num{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:rgba(184,137,58,.12);line-height:1;margin-bottom:20px;transition:color .4s}
+    .svc:hover .svc-num{color:rgba(184,137,58,.28)}
+    .svc-icon{font-size:1.8rem;display:block;margin-bottom:14px}
+    .svc-name{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400;margin-bottom:14px;color:var(--text)}
+    .svc-desc{font-size:.78rem;line-height:1.9;color:var(--soft);margin-bottom:20px}
+    .svc-toggle{display:inline-flex;align-items:center;gap:8px;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--brun);cursor:none;border:none;background:none;font-family:'Josefin Sans',sans-serif;padding:0;transition:color .3s}
+    .svc-toggle:hover{color:var(--or)}
+    .svc-toggle-arrow{transition:transform .35s;display:inline-block}
+    .svc-toggle.open .svc-toggle-arrow{transform:rotate(180deg)}
+
+    /* Sous-catégories */
+    .svc-subs{display:none;margin-top:18px;border-top:1px solid rgba(184,137,58,.15);padding-top:18px}
+    .svc-subs.open{display:block}
+    .sub-item{padding:10px 0;border-bottom:1px solid rgba(184,137,58,.08)}
+    .sub-item:last-child{border-bottom:none}
+    .sub-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:400;color:var(--brun);margin-bottom:4px}
+    .sub-desc{font-size:.74rem;line-height:1.8;color:var(--soft)}
+
+    /* ABOUT */
+    .about{display:grid;grid-template-columns:1fr 1fr}
+    .about-visual{position:relative;overflow:hidden;background:linear-gradient(140deg,#e0ccb0,#cdb48e,#d8c5a0,#e8d8be);min-height:760px}
+    .about-visual::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-22deg,transparent 0,transparent 90px,rgba(255,255,255,.16) 90px,rgba(255,255,255,.16) 92px)}
+
+    /* Badge 15+ en haut, bien séparé */
+    .about-ring{position:absolute;top:40px;left:50%;transform:translateX(-50%);width:185px;height:185px;border-radius:50%;border:1px solid rgba(184,137,58,.4);display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(253,249,244,.12);backdrop-filter:blur(10px);z-index:2;text-align:center;padding:14px}
+    .ring-n{font-family:'Cormorant Garamond',serif;font-size:2.7rem;font-weight:300;color:var(--white);line-height:1}
+    .ring-label{font-size:.48rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(253,249,244,.75);margin-top:8px;line-height:1.7}
+
+    /* Espace explicite entre badge et stats */
+    .about-spacer{position:absolute;top:275px;left:50%;transform:translateX(-50%);width:1px;height:220px;background:linear-gradient(to bottom,rgba(184,137,58,.3),transparent)}
+
+    /* Stats bien séparées en bas */
+    .trust-strip{position:absolute;bottom:0;left:0;right:0;display:flex;background:rgba(30,15,5,.48);backdrop-filter:blur(6px);border-top:1px solid rgba(184,137,58,.2)}
+    .trust-item{flex:1;padding:26px 8px;text-align:center;border-right:1px solid rgba(184,137,58,.15)}
+    .trust-item:last-child{border-right:none}
+    .trust-icon{font-size:1.3rem;display:block;margin-bottom:7px}
+    .trust-num{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:var(--or2);display:block;line-height:1}
+    .trust-txt{font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(253,249,244,.58);display:block;margin-top:5px;line-height:1.6}
+
+    .about-text{background:var(--bg2);padding:80px 72px;display:flex;flex-direction:column;justify-content:center}
+    .about-body{font-size:.84rem;line-height:2.1;color:var(--soft);margin:26px 0 42px}
+    .feat-list{display:flex;flex-direction:column;gap:14px}
+    .feat{display:flex;gap:18px;align-items:flex-start;padding:16px 20px;background:var(--white);border-left:2px solid var(--or)}
+    .feat-icon{font-size:.9rem;color:var(--or);margin-top:2px;flex-shrink:0}
+    .feat-label{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--brun);margin-bottom:3px}
+    .feat-desc{font-size:.78rem;line-height:1.7;color:var(--soft)}
+
+    /* BOOKING */
+    .booking{padding:120px 100px 160px;text-align:center;background:linear-gradient(140deg,var(--brun) 0%,#7a5028 50%,#4e2e10 100%);position:relative;overflow:visible}
+    .booking::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-38deg,transparent 0,transparent 70px,rgba(255,255,255,.025) 70px,rgba(255,255,255,.025) 71px)}
+    .booking .s-eyebrow{justify-content:center;color:var(--or2)}
+    .booking .s-eyebrow::before{background:var(--or2)}
+    .booking .s-title{color:var(--white)}
+    .booking .s-title em{color:var(--or2)}
+    .bk-sub{font-size:.82rem;line-height:2;color:rgba(253,249,244,.55);max-width:420px;margin:18px auto 54px}
+    .bform{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:680px;margin:0 auto}
+    .bfield-full{grid-column:1/-1}
+    .bfield-text{background:rgba(247,241,232,.08);border:1px solid rgba(247,241,232,.2);padding:16px 20px;color:var(--white);font-family:'Josefin Sans',sans-serif;font-size:.74rem;letter-spacing:.12em;outline:none;cursor:none;transition:border-color .3s,background .3s;width:100%}
+    .bfield-text::placeholder{color:rgba(247,241,232,.38)}
+    .bfield-text:focus{border-color:var(--or2);background:rgba(247,241,232,.13)}
+
+    /* Pickers élégants */
+    .elegant-picker-wrap{position:relative;width:100%;grid-column:1/-1}
+    .elegant-display{width:100%;background:rgba(247,241,232,.08);border:1px solid rgba(247,241,232,.2);padding:16px 44px 16px 20px;color:rgba(247,241,232,.38);font-family:'Josefin Sans',sans-serif;font-size:.74rem;letter-spacing:.12em;cursor:none;transition:border-color .3s,background .3s;display:flex;align-items:center;justify-content:space-between;user-select:none}
+    .elegant-display.has-val{color:var(--white)}
+    .elegant-display-icon{color:rgba(247,241,232,.4);font-size:.7rem;flex-shrink:0}
+    .elegant-dropdown{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:linear-gradient(150deg,#5c3a1e 0%,#4a2e12 100%);border:1px solid rgba(184,137,58,.35);box-shadow:0 24px 70px rgba(20,10,0,.45);z-index:300}
+    .elegant-dropdown.open{display:block}
+
+    .dp-inner{padding:22px}
+    .dp-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    .dp-month-lbl{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic;color:var(--or2);letter-spacing:.06em}
+    .dp-arrow{background:none;border:1px solid rgba(184,137,58,.3);color:var(--or2);width:30px;height:30px;cursor:none;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all .3s;flex-shrink:0}
+    .dp-arrow:hover{background:var(--or);color:var(--dark);border-color:var(--or)}
+    .dp-head{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:6px}
+    .dp-dn{text-align:center;font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(247,241,232,.38);padding:4px 0}
+    .dp-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+    .dp-d{text-align:center;padding:9px 4px;font-size:.72rem;color:rgba(247,241,232,.72);cursor:none;transition:all .22s;border:1px solid transparent}
+    .dp-d:hover:not(.dp-dis):not(.dp-emp){background:rgba(184,137,58,.22);border-color:rgba(184,137,58,.35);color:var(--white)}
+    .dp-d.dp-sel{background:var(--or);color:var(--dark);border-color:var(--or)}
+    .dp-d.dp-dis{color:rgba(247,241,232,.18);pointer-events:none}
+    .dp-d.dp-emp{visibility:hidden}
+
+    .hour-list-inner{padding:8px;max-height:250px;overflow-y:auto}
+    .hour-list-inner::-webkit-scrollbar{width:3px}
+    .hour-list-inner::-webkit-scrollbar-thumb{background:rgba(184,137,58,.3)}
+    .hour-option{padding:12px 18px;font-family:'Josefin Sans',sans-serif;font-size:.72rem;letter-spacing:.15em;color:rgba(247,241,232,.7);cursor:none;transition:all .2s;border-bottom:1px solid rgba(184,137,58,.1)}
+    .hour-option:last-child{border-bottom:none}
+    .hour-option:hover{background:rgba(184,137,58,.18);color:var(--white)}
+    .hour-option.sel{background:var(--or);color:var(--dark)}
+
+    .bbtn{grid-column:1/-1;background:var(--or);color:var(--dark);border:none;padding:17px 34px;font-family:'Josefin Sans',sans-serif;font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;cursor:none;transition:background .3s,transform .2s;margin-top:6px;width:100%}
+    .bbtn:hover{background:var(--or2);transform:translateY(-2px)}
+    .bk-note{font-size:.62rem;letter-spacing:.14em;color:rgba(247,241,232,.3);margin-top:14px;display:block}
+
+    /* CONTACT */
+    .contact-section{background:var(--white);padding:90px 100px}
+    .contact-cols{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+    .h-col-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--text);margin-bottom:24px}
+    .h-col-title em{font-style:italic;color:var(--brun)}
+    .h-list{list-style:none}
+    .h-list li{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(184,137,58,.12);font-size:.78rem;color:var(--soft)}
+    .h-list li strong{color:var(--brun);font-weight:400}
+    .h-list li.off{color:rgba(138,112,96,.35)}
+    .h-list li.off strong{color:rgba(138,112,96,.35)}
+    .coord-block{display:flex;flex-direction:column;gap:14px}
+    .find-row{display:flex;gap:14px;align-items:flex-start;padding:16px;background:var(--bg);border-left:2px solid var(--or)}
+    .find-icon-box{width:30px;height:30px;border:1px solid rgba(184,137,58,.28);display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;margin-top:2px}
+    .find-label{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--or);margin-bottom:4px}
+    .find-val{font-size:.8rem;line-height:1.75;color:var(--soft)}
+    .find-val a{color:var(--soft);text-decoration:none;transition:color .3s;cursor:none}
+    .find-val a:hover{color:var(--brun)}
+    .btn-maps{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;background:var(--brun);color:var(--white);font-family:'Josefin Sans',sans-serif;font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;border:1px solid var(--brun);transition:all .3s;cursor:none;margin-top:4px}
+    .btn-maps:hover{background:var(--or);border-color:var(--or)}
+
+    /* FOOTER */
+    footer{background:var(--dark);padding:38px 100px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(184,137,58,.2);flex-wrap:wrap;gap:16px}
+    .f-logo{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:300;letter-spacing:.24em;text-transform:uppercase;color:rgba(247,241,232,.45)}
+    .f-logo em{font-style:italic;color:var(--or)}
+    .f-tagline{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-style:italic;color:rgba(247,241,232,.28);letter-spacing:.06em;text-align:center}
+    .f-copy{font-size:.58rem;letter-spacing:.12em;color:rgba(247,241,232,.2)}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes growLine{from{opacity:0;width:0}to{opacity:1;width:52px}}
+    @keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.04)}}
+    @keyframes scrollPulse{0%,100%{opacity:1;transform:scaleY(1)}50%{opacity:.35;transform:scaleY(.55)}}
+    @keyframes tickerRoll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+    .reveal{opacity:0;transform:translateY(34px);transition:opacity .85s ease,transform .85s ease}
+    .reveal.in{opacity:1;transform:translateY(0)}
+
+    @media(max-width:960px){
+      nav{padding:0 20px}nav ul{display:none}
+      .hero{grid-template-columns:1fr}.hero-right{display:none}.hero-left{padding:100px 28px 60px}
+      .services{padding:70px 24px}.svc-grid{grid-template-columns:1fr;gap:10px}
+      .about{grid-template-columns:1fr}.about-visual{min-height:340px}.about-text{padding:60px 28px}
+      .booking{padding:70px 24px 120px}.bform{grid-template-columns:1fr}
+      .contact-section{padding:60px 24px}.contact-cols{grid-template-columns:1fr;gap:40px}
+      footer{padding:36px 24px;flex-direction:column;text-align:center}
+    }
+  </style>
+</head>
+<body>
+  <div id="cur"></div>
+  <div id="ring"></div>
+
+  <!-- GLOBE -->
+  <div class="lang-wrap">
+    <button class="lang-globe">🌐</button>
+    <div class="lang-dropdown">
+      <button class="lang-opt active" onclick="setLang('fr',this)">🇫🇷 &nbsp;Français</button>
+      <button class="lang-opt" onclick="setLang('en',this)">🇬🇧 &nbsp;English</button>
+      <button class="lang-opt" onclick="setLang('ar',this)">🇱🇧 &nbsp;العربية</button>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <a class="logo-wrap" href="#home">
+      <div class="logo-text">
+        <span class="logo-top">Salon</span>
+        <span class="logo-main">Carmen</span>
+      </div>
+    </a>
+a>
+    <ul>
+      <li><a href="#services" data-i="nav_svc">Prestations</a></li>
+      <li><a href="#about"    data-i="nav_ab">À Propos</a></li>
+      <li><a href="#booking"  data-i="nav_bk">Réservation</a></li>
+      <li><a href="#contact"  data-i="nav_ct">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-left">
+      <div class="eyebrow" data-i="h_tag">Salon de Coiffure Féminin</div>
+      <h1 data-i="h_h1">L'art de<br/>sublimer<br/><em>votre beauté</em></h1>
+      <div class="hero-rule"></div>
+      <p class="hero-sub" data-i="h_sub">Un espace dédié exclusivement aux femmes, où chaque détail est pensé pour votre bien-être et votre élégance.</p>
+      <p class="hero-femme" data-i="h_femme">✦ Créé par une femme, pour les femmes ✦</p>
+    </div>
+    <div class="hero-right">
+      <div class="marble-panel"><div class="panel-monogram">C</div></div>
+      <div class="scroll-hint"><div class="scroll-line"></div><span data-i="scroll">Défiler</span></div>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker"><div class="ticker-inner" id="tickerInner"></div></div>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="svc-hd reveal">
+      <div class="s-eyebrow" data-i="sv_tag">Ce que nous offrons</div>
+      <h2 class="s-title" data-i="sv_h2">Nos <em>Prestations</em></h2>
+    </div>
+    <div class="svc-grid" id="svc-grid"></div>
+  </section>
+
+  <!-- ABOUT -->
+  <div class="about" id="about">
+    <div class="about-visual reveal">
+      <div class="about-ring">
+        <div class="ring-n">15+</div>
+        <div class="ring-label" data-i="ring_lbl">Ans de pratique<br/>& d'excellence</div>
+      </div>
+      <div class="about-spacer"></div>
+      <div class="trust-strip">
+        <div class="trust-item">
+          <span class="trust-icon">👩‍🦱</span>
+          <span class="trust-num">5 000+</span>
+          <span class="trust-txt" data-i="t1">Femmes<br/>accompagnées</span>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">🌿</span>
+          <span class="trust-num">100 %</span>
+          <span class="trust-txt" data-i="t2">Produits<br/>naturels & premium</span>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">⭐</span>
+          <span class="trust-num">98 %</span>
+          <span class="trust-txt" data-i="t3">Avis<br/>positifs</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-text reveal">
+      <div class="s-eyebrow" data-i="ab_tag">Notre univers</div>
+      <h2 class="s-title" data-i="ab_h2">Un salon pensé<br/>pour <em>vous</em></h2>
+      <p class="about-body" data-i="ab_body">Le Salon Carmen, c'est bien plus qu'un salon de coiffure. C'est un espace chaleureux, cosy et raffiné, réservé exclusivement aux femmes, où vous pouvez souffler et vous ressourcer.<br/><br/>Situé au cœur de Beyrouth-Dora, je vous accueille avec le sourire et toute l'expertise nécessaire pour sublimer votre beauté.</p>
+      <div class="feat-list">
+        <div class="feat"><div class="feat-icon">◆</div><div><div class="feat-label" data-i="f1l">Espace 100 % féminin</div><div class="feat-desc" data-i="f1d">Un cadre intime et bienveillant, rien que pour vous.</div></div></div>
+        <div class="feat"><div class="feat-icon">◆</div><div><div class="feat-label" data-i="f2l">Ambiance cocooning</div><div class="feat-desc" data-i="f2d">Lumières douces, décor marbré, atmosphère chaleureuse et élégante.</div></div></div>
+        <div class="feat"><div class="feat-icon">◆</div><div><div class="feat-label" data-i="f3l">Produits premium</div><div class="feat-desc" data-i="f3d">Uniquement des produits capillaires naturels et de haute qualité.</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RÉSERVATION -->
+  <section class="booking" id="booking">
+    <div class="s-eyebrow reveal" data-i="bk_tag">Réservez en ligne</div>
+    <h2 class="s-title reveal" data-i="bk_h2">Prenez <em>rendez-vous</em></h2>
+    <p class="bk-sub reveal" data-i="bk_sub">En quelques secondes, bloquez votre créneau et laissez-moi prendre soin de vous.</p>
+    <div class="bform reveal">
+      <input class="bfield-text" type="text" id="bk-name"  placeholder="Votre prénom" data-ph="ph_name"/>
+      <input class="bfield-text" type="tel"  id="bk-phone" placeholder="Votre téléphone" data-ph="ph_phone"/>
+
+      <!-- Date picker -->
+      <div class="elegant-picker-wrap bfield-full" id="date-wrap">
+        <div class="elegant-display" id="date-display" onclick="togglePicker('date')">
+          <span id="date-txt" data-i="ph_date">Choisir une date</span>
+          <span class="elegant-display-icon">✦</span>
+        </div>
+        <div class="elegant-dropdown" id="date-picker">
+          <div class="dp-inner">
+            <div class="dp-nav">
+              <button class="dp-arrow" onclick="dpPrev(event)">‹</button>
+              <div class="dp-month-lbl" id="dp-month"></div>
+              <button class="dp-arrow" onclick="dpNext(event)">›</button>
+            </div>
+            <div class="dp-head" id="dp-head"></div>
+            <div class="dp-grid" id="dp-grid"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Heure picker (même style) -->
+      <div class="elegant-picker-wrap bfield-full" id="hour-wrap">
+        <div class="elegant-display" id="hour-display" onclick="togglePicker('hour')">
+          <span id="hour-txt" data-i="ph_time">Choisir l'heure</span>
+          <span class="elegant-display-icon">✦</span>
+        </div>
+        <div class="elegant-dropdown" id="hour-picker">
+          <div class="hour-list-inner" id="hour-list"></div>
+        </div>
+      </div>
+
+      <button class="bbtn" onclick="sendReservation()" data-i="bk_btn">Réserver</button>
+    </div>
+    <span class="bk-note" data-i="bk_note">Ouvert du mardi au samedi · 10h30 – 17h00</span>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact-section" id="contact">
+    <div class="contact-cols">
+      <div class="reveal">
+        <div class="s-eyebrow" data-i="h_tag">Horaires</div>
+        <div class="h-col-title" data-i="h_h">Quand nous<br/><em>retrouver</em></div>
+        <ul class="h-list">
+          <li class="off"><strong data-i="d0">Lundi</strong>    <span data-i="closed">Fermé</span></li>
+          <li><strong data-i="d1">Mardi</strong>    10h30 – 17h00</li>
+          <li><strong data-i="d2">Mercredi</strong> 10h30 – 17h00</li>
+          <li><strong data-i="d3">Jeudi</strong>    10h30 – 17h00</li>
+          <li><strong data-i="d4">Vendredi</strong> 10h30 – 17h00</li>
+          <li><strong data-i="d5">Samedi</strong>   10h30 – 17h00</li>
+          <li class="off"><strong data-i="d6">Dimanche</strong> <span data-i="closed">Fermé</span></li>
+        </ul>
+      </div>
+      <div class="coord-block reveal">
+        <div class="s-eyebrow" data-i="c_tag">Nos coordonnées</div>
+        <div class="h-col-title" data-i="c_h">Où & comment<br/><em>nous retrouver</em></div>
+        <div class="find-row">
+          <div class="find-icon-box">📍</div>
+          <div><div class="find-label" data-i="c_al">Adresse</div>
+          <div class="find-val" data-i="c_av">Beyrouth-Dora<br/>Rue Notre Dame De La Paix<br/>Liban</div></div>
+        </div>
+        <div class="find-row">
+          <div class="find-icon-box">💬</div>
+          <div><div class="find-label" data-i="c_tl">Téléphone · WhatsApp</div>
+          <div class="find-val"><a href="https://wa.me/9613438303" target="_blank">03 438 303</a></div></div>
+        </div>
+        <div class="find-row">
+          <div class="find-icon-box">✉️</div>
+          <div><div class="find-label" data-i="c_el">Email</div>
+          <div class="find-val"><a href="mailto:saloncarmen.pro@gmail.com?subject=Contact%20Salon%20Carmen&body=Bonjour%2C%0A%0AJe%20vous%20contacte%20au%20sujet%20de...">saloncarmen.pro@gmail.com</a></div></div>
+        </div>
+        <a href="https://maps.app.goo.gl/ez1p1aDfRAUHRjsK8" target="_blank" class="btn-maps" data-i="map_btn">📍 Ouvrir sur Google Maps</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="f-logo">Salon <em>Carmen</em></div>
+    <div class="f-tagline" data-i="f_tag">« Parce que chaque femme mérite de se sentir sublime. »</div>
+    <div class="f-copy" data-i="f_copy">© 2025 Salon Carmen · Tous droits réservés</div>
+  </footer>
+
+<script>
+/* CURSEUR */
+const cur=document.getElementById('cur'),ring=document.getElementById('ring');
+document.addEventListener('mousemove',e=>{
+  cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';
+  setTimeout(()=>{ring.style.left=e.clientX+'px';ring.style.top=e.clientY+'px';},95);
+});
+function addHover(el){
+  el.addEventListener('mouseenter',()=>{cur.style.width='16px';cur.style.height='16px';ring.style.width='52px';ring.style.height='52px';});
+  el.addEventListener('mouseleave',()=>{cur.style.width='9px';cur.style.height='9px';ring.style.width='32px';ring.style.height='32px';});
+}
+document.querySelectorAll('a,button,.svc,.elegant-display').forEach(addHover);
+
+/* SCROLL REVEAL */
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in');}),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* ─── DONNÉES SERVICES ─── */
+const servicesData = [
+  {
+    icon:'💇‍♀️', num:'01',
+    name:'Coiffure',
+    desc:'De la mise en forme quotidienne à la coiffure de gala, nous donnons vie à votre chevelure avec soin et précision.',
+    subs:[
+      {name:'Brushing',          desc:'Un brushing lissant ou volumisant réalisé à la brosse ronde pour un rendu impeccable qui dure toute la journée.'},
+      {name:'Wavy',              desc:'Des ondulations naturelles et sensuelles créées au fer ou à la brosse, pour une allure détendue et sophistiquée.'},
+      {name:'Lissage',           desc:'Un lissage à plat au fer professionnel pour une chevelure soyeuse, brillante et parfaitement disciplinée.'},
+      {name:'Chignon',           desc:'Chignon classique, tressé ou romantique — élaboré pour tenir toute la nuit, que ce soit pour un dîner ou un mariage.'},
+      {name:'Coiffage simple',   desc:'Une mise en forme légère et rapide pour sublimer votre naturel et commencer la journée avec élégance.'},
+      {name:'Coiffure de mariée',desc:'Une création exclusive pensée pour votre plus beau jour : essai inclus, tenue garantie du matin au dernier slow.'},
+    ]
+  },
+  {
+    icon:'✂️', num:'02',
+    name:'Coupe',
+    desc:'Chaque coupe est une sculpture adaptée à votre visage, votre style et votre personnalité.',
+    subs:[
+      {name:'Coupe basique',          desc:'Rafraîchissement des pointes et égalisation pour redonner légèreté et vie à votre chevelure.'},
+      {name:'Coupe dégradée',         desc:'Un dégradé travaillé qui structure la coiffure, apporte du volume et facilite le coiffage quotidien.'},
+      {name:'Coupe effilée / effilage',desc:'L\'effilage allège la masse capillaire et crée du mouvement pour un rendu aérien et naturel.'},
+      {name:'Carré',                  desc:'Le carré net et précis, intemporel et chic, taillé sur-mesure selon la forme de votre visage.'},
+      {name:'Carré long / plongeant', desc:'Un carré allongé ou plongeant qui joue avec les longueurs pour un effet moderne et structuré.'},
+      {name:'Coupe garçon',           desc:'Une coupe courte et affirmée, sculptée avec précision pour un style audacieux et raffiné.'},
+      {name:'Frange',                 desc:'Frange droite, rideau, texturée ou de côté — taillée avec soin pour encadrer parfaitement votre visage.'},
+    ]
+  },
+  {
+    icon:'🎨', num:'03',
+    name:'Coloration',
+    desc:'Des couleurs lumineuses et sur-mesure appliquées avec des produits respectueux de la fibre capillaire.',
+    subs:[
+      {name:'Coloration complète', desc:'Une couleur uniforme et intense du root à la pointe, pour un résultat riche, brillant et longue durée.'},
+      {name:'Coloration racine',   desc:'Reprise de la racine pour estomper la repousse et harmoniser la couleur avec le reste de la chevelure.'},
+      {name:'Balayage',            desc:'Des touches de lumière déposées à la main pour un effet soleil naturel et très tendance.'},
+      {name:'Mèches',              desc:'Des mèches fines ou larges, subtiles ou contrastées, pour structurer et illuminer votre couleur de base.'},
+      {name:'Ombré',               desc:'Un dégradé de couleur fluide du foncé vers le clair, pour un effet profondeur chic et ultra moderne.'},
+      {name:'Décoloration',        desc:'Une décoloration maîtrisée pour préparer la fibre à recevoir une couleur vive ou un balayage éclatant.'},
+    ]
+  },
+  {
+    icon:'🌿', num:'04',
+    name:'Soin Cheveux',
+    desc:'Des soins d\'exception pour nourrir, réparer et régénérer votre chevelure en profondeur.',
+    subs:[
+      {name:'Soin nourrissant',     desc:'Un masque riche en actifs nourrissants appliqué en chaleur pendant 20 minutes pour restaurer souplesse et brillance.'},
+      {name:'Soin réparateur',      desc:'Un traitement intensif qui reconstitue la kératine et referme les écailles pour des cheveux forts et soyeux.'},
+      {name:'Massage cuir chevelu', desc:'Un massage relaxant de 25 minutes à l\'huile de ricin et aux huiles essentielles pour stimuler la circulation, apaiser le cuir chevelu et favoriser la pousse.'},
+    ]
+  },
+  {
+    icon:'✨', num:'05',
+    name:'Épilation',
+    desc:'Une épilation précise et douce, réalisée avec soin pour une peau lisse et confortable.',
+    subs:[
+      {name:'Sourcils',           desc:'Remodelage et définition des sourcils à la cire ou au fil pour un regard expressif et parfaitement encadré.'},
+      {name:'Lèvre',              desc:'Épilation délicate de la lèvre supérieure pour un teint uniforme et une peau impeccablement lisse.'},
+      {name:'Visage complet',     desc:'Épilation intégrale du visage (joues, menton, front, lèvre) pour une peau douce et lumineuse.'},
+      {name:'Bras',               desc:'Épilation complète des bras à la cire chaude ou froide pour un résultat durable et une peau veloutée.'},
+      {name:'Aisselles',          desc:'Épilation rapide et efficace des aisselles pour un confort immédiat et une peau lisse plusieurs semaines.'},
+      {name:'Jambes',             desc:'Épilation des demi-jambes ou jambes entières pour une peau parfaitement lisse et douce au toucher.'},
+      {name:'Contour du maillot', desc:'Un contour net et précis pour vous sentir à l\'aise et élégante en toute saison.'},
+    ]
+  },
+  {
+    icon:'💄', num:'06',
+    name:'Maquillage',
+    desc:'Un maquillage professionnel sublimant votre beauté naturelle, pour chaque occasion de votre vie.',
+    subs:[
+      {name:'Maquillage événementiel', desc:'Un maquillage travaillé et longue tenue pour anniversaires, cérémonies ou tout événement qui vous mérite d\'être remarquée.'},
+      {name:'Maquillage léger',        desc:'Un maquillage naturel et frais qui illumine le teint sans l\'alourdir — parfait pour le quotidien ou le bureau.'},
+      {name:'Maquillage de soirée',    desc:'Un glamour affirmé avec des yeux intenses, un teint parfait et une tenue garantie toute la nuit.'},
+      {name:'Maquillage de mariage',   desc:'Le maquillage de vos rêves pour votre plus beau jour : consultation incluse, retouches et longue tenue assurées.'},
+    ]
+  }
+];
+
+/* Construire les services */
+function buildServices(){
+  const grid=document.getElementById('svc-grid');
+  grid.innerHTML=servicesData.map((s,i)=>`
+    <div class="svc reveal" style="transition-delay:${i*.08}s">
+      <div class="svc-num">${s.num}</div>
+      <span class="svc-icon">${s.icon}</span>
+      <div class="svc-name">${s.name}</div>
+      <p class="svc-desc">${s.desc}</p>
+      <button class="svc-toggle" onclick="toggleSvc(${i},this)">
+        <span data-i="see_more">Voir les prestations</span>
+        <span class="svc-toggle-arrow">▾</span>
+      </button>
+      <div class="svc-subs" id="subs-${i}">
+        ${s.subs.map(sub=>`
+          <div class="sub-item">
+            <div class="sub-name">${sub.name}</div>
+            <div class="sub-desc">${sub.desc}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+  // re-observe reveals
+  document.querySelectorAll('.svc.reveal').forEach(el=>obs.observe(el));
+  document.querySelectorAll('.svc-toggle').forEach(addHover);
+}
+buildServices();
+
+function toggleSvc(i,btn){
+  const subs=document.getElementById('subs-'+i);
+  subs.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+
+/* TICKER */
+const tickerPhrases={
+  fr:[
+    '✨ Des résultats qui parlent d\'eux-mêmes',
+    '🌿 100 % de produits naturels & premium',
+    '💛 Une femme à votre écoute, toujours',
+    '💎 L\'excellence à chaque prestation',
+    '🌸 Votre bien-être, notre priorité absolue',
+    '✂️ Expertise capillaire depuis 15 ans',
+    '💄 Du soin au maquillage, tout en un seul lieu',
+    '⭐ La confiance de plus de 5 000 femmes',
+  ],
+  en:[
+    '✨ Results that speak for themselves',
+    '🌿 100% natural & premium products',
+    '💛 A woman listening to you, always',
+    '💎 Excellence in every service',
+    '🌸 Your well-being, our absolute priority',
+    '✂️ Hair expertise for over 15 years',
+    '💄 From care to makeup, all in one place',
+    '⭐ Trusted by over 5,000 women',
+  ],
+  ar:[
+    '✨ نتائج تتحدث عن نفسها',
+    '🌿 100% منتجات طبيعية وفاخرة',
+    '💛 امرأة تسمعكِ دائماً',
+    '💎 التميز في كل خدمة',
+    '🌸 راحتكِ أولويتنا المطلقة',
+    '✂️ خبرة تجميل تمتد 15 عاماً',
+    '💄 من العناية إلى الماكياج، كل شيء في مكان واحد',
+    '⭐ ثقة أكثر من 5000 امرأة',
+  ]
+};
+function buildTicker(l){
+  const ti=document.getElementById('tickerInner');
+  const phrases=tickerPhrases[l];
+  let h='';
+  for(let r=0;r<3;r++) phrases.forEach(p=>{h+=`<span class="t-item">${p}</span>`;});
+  ti.innerHTML=h;
+}
+buildTicker('fr');
+
+/* DATE PICKER */
+let dpCurrent=new Date(),dpSelected=null;
+dpCurrent.setDate(1);
+const monthNamesMap={
+  fr:['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+  en:['January','February','March','April','May','June','July','August','September','October','November','December'],
+  ar:['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر']
+};
+const dayNamesMap={
+  fr:['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
+  en:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+  ar:['أح','إث','ثل','أر','خم','جم','سب']
+};
+function renderDP(){
+  document.getElementById('dp-month').textContent=monthNamesMap[lang][dpCurrent.getMonth()]+' '+dpCurrent.getFullYear();
+  document.getElementById('dp-head').innerHTML=dayNamesMap[lang].map(d=>`<div class="dp-dn">${d}</div>`).join('');
+  const today=new Date();today.setHours(0,0,0,0);
+  const firstDay=new Date(dpCurrent.getFullYear(),dpCurrent.getMonth(),1).getDay();
+  const dim=new Date(dpCurrent.getFullYear(),dpCurrent.getMonth()+1,0).getDate();
+  let c='';
+  for(let i=0;i<firstDay;i++) c+=`<div class="dp-d dp-emp"></div>`;
+  for(let d=1;d<=dim;d++){
+    const dt=new Date(dpCurrent.getFullYear(),dpCurrent.getMonth(),d);
+    const dis=dt<today||dt.getDay()===0||dt.getDay()===1;
+    const sel=dpSelected&&dt.toDateString()===dpSelected.toDateString();
+    c+=`<div class="dp-d${dis?' dp-dis':''}${sel?' dp-sel':''}" ${dis?'':'onclick="selectDay('+d+')"'}>${d}</div>`;
+  }
+  document.getElementById('dp-grid').innerHTML=c;
+}
+function dpPrev(e){e.stopPropagation();dpCurrent=new Date(dpCurrent.getFullYear(),dpCurrent.getMonth()-1,1);renderDP();}
+function dpNext(e){e.stopPropagation();dpCurrent=new Date(dpCurrent.getFullYear(),dpCurrent.getMonth()+1,1);renderDP();}
+function selectDay(d){
+  dpSelected=new Date(dpCurrent.getFullYear(),dpCurrent.getMonth(),d);
+  const locale=lang==='ar'?'ar-LB':lang==='en'?'en-GB':'fr-FR';
+  document.getElementById('date-txt').textContent=dpSelected.toLocaleDateString(locale,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('date-display').classList.add('has-val');
+  document.getElementById('date-picker').classList.remove('open');
+  renderDP();
+}
+
+/* HEURE */
+let selectedHour=null;
+const slots=['10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00'];
+function buildHours(){
+  document.getElementById('hour-list').innerHTML=slots.map(t=>
+    `<div class="hour-option${selectedHour===t?' sel':''}" onclick="selectHour('${t}')">${t}</div>`
+  ).join('');
+  document.querySelectorAll('.hour-option').forEach(addHover);
+}
+function selectHour(t){
+  selectedHour=t;
+  document.getElementById('hour-txt').textContent=t;
+  document.getElementById('hour-display').classList.add('has-val');
+  document.getElementById('hour-picker').classList.remove('open');
+  buildHours();
+}
+
+/* TOGGLE PICKERS */
+function togglePicker(which){
+  const dp=document.getElementById('date-picker');
+  const hp=document.getElementById('hour-picker');
+  if(which==='date'){
+    const was=dp.classList.contains('open');
+    dp.classList.remove('open');hp.classList.remove('open');
+    if(!was){dp.classList.add('open');renderDP();}
+  } else {
+    const was=hp.classList.contains('open');
+    dp.classList.remove('open');hp.classList.remove('open');
+    if(!was){hp.classList.add('open');buildHours();}
+  }
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#date-wrap')) document.getElementById('date-picker').classList.remove('open');
+  if(!e.target.closest('#hour-wrap')) document.getElementById('hour-picker').classList.remove('open');
+});
+
+/* RÉSERVATION */
+function sendReservation(){
+  const name=document.getElementById('bk-name').value.trim();
+  const phone=document.getElementById('bk-phone').value.trim();
+  if(!name||!phone||!dpSelected||!selectedHour){
+    alert(i18n[lang]?.fill_all||'Veuillez remplir tous les champs.');return;
+  }
+  const dateStr=dpSelected.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const msg=`🌸 *Nouvelle réservation — Salon Carmen*\n\n👤 Nom : ${name}\n📞 Téléphone : ${phone}\n📅 Date : ${dateStr}\n⏰ Heure : ${selectedHour}\n\nMerci et à très bientôt !`;
+  // WhatsApp direct
+  window.open(`https://wa.me/9613438303?text=${encodeURIComponent(msg)}`,'_blank');
+  // Email
+  const subj=encodeURIComponent(`Réservation — ${name} — ${dateStr} à ${selectedHour}`);
+  const body=encodeURIComponent(`Nouvelle réservation — Salon Carmen\n\nNom : ${name}\nTéléphone : ${phone}\nDate : ${dateStr}\nHeure : ${selectedHour}`);
+  setTimeout(()=>window.open(`mailto:saloncarmen.pro@gmail.com?subject=${subj}&body=${body}`)  ,700);
+}
+
+/* i18n */
+let lang='fr';
+const i18n={
+  fr:{nav_svc:'Prestations',nav_ab:'À Propos',nav_bk:'Réservation',nav_ct:'Contact',
+    h_tag:'Salon de Coiffure Féminin',h_h1:'L\'art de<br/>sublimer<br/><em>votre beauté</em>',
+    h_sub:'Un espace dédié exclusivement aux femmes, où chaque détail est pensé pour votre bien-être et votre élégance.',
+    h_femme:'✦ Créé par une femme, pour les femmes ✦',scroll:'Défiler',
+    sv_tag:'Ce que nous offrons',sv_h2:'Nos <em>Prestations</em>',see_more:'Voir les prestations',
+    ring_lbl:'Ans de pratique\n& d\'excellence',
+    t1:'Femmes\naccompagnées',t2:'Produits\nnaturels & premium',t3:'Avis\npositifs',
+    ab_tag:'Notre univers',ab_h2:'Un salon pensé<br/>pour <em>vous</em>',
+    ab_body:'Le Salon Carmen, c\'est bien plus qu\'un salon de coiffure. C\'est un espace chaleureux, cosy et raffiné, réservé exclusivement aux femmes, où vous pouvez souffler et vous ressourcer.<br/><br/>Situé au cœur de Beyrouth-Dora, je vous accueille avec le sourire et toute l\'expertise nécessaire pour sublimer votre beauté.',
+    f1l:'Espace 100 % féminin',f1d:'Un cadre intime et bienveillant, rien que pour vous.',
+    f2l:'Ambiance cocooning',f2d:'Lumières douces, décor marbré, atmosphère chaleureuse et élégante.',
+    f3l:'Produits premium',f3d:'Uniquement des produits capillaires naturels et de haute qualité.',
+    bk_tag:'Réservez en ligne',bk_h2:'Prenez <em>rendez-vous</em>',
+    bk_sub:'En quelques secondes, bloquez votre créneau et laissez-moi prendre soin de vous.',
+    ph_name:'Votre prénom',ph_phone:'Votre téléphone',ph_date:'Choisir une date',ph_time:'Choisir l\'heure',
+    bk_btn:'Réserver',bk_note:'Ouvert du mardi au samedi · 10h30 – 17h00',fill_all:'Veuillez remplir tous les champs.',
+    h_tag:'Horaires',h_h:'Quand nous<br/><em>retrouver</em>',
+    d0:'Lundi',d1:'Mardi',d2:'Mercredi',d3:'Jeudi',d4:'Vendredi',d5:'Samedi',d6:'Dimanche',closed:'Fermé',
+    c_tag:'Nos coordonnées',c_h:'Où & comment<br/><em>nous retrouver</em>',
+    c_al:'Adresse',c_av:'Beyrouth-Dora<br/>Rue Notre Dame De La Paix<br/>Liban',
+    c_tl:'Téléphone · WhatsApp',c_el:'Email',map_btn:'📍 Ouvrir sur Google Maps',
+    f_tag:'« Parce que chaque femme mérite de se sentir sublime. »',f_copy:'© 2025 Salon Carmen · Tous droits réservés'},
+  en:{nav_svc:'Services',nav_ab:'About',nav_bk:'Booking',nav_ct:'Contact',
+    h_tag:'Women\'s Hair Salon',h_h1:'The art of<br/>revealing<br/><em>your beauty</em>',
+    h_sub:'A space dedicated exclusively to women, where every detail is designed for your well-being.',
+    h_femme:'✦ Created by a woman, for women ✦',scroll:'Scroll',
+    sv_tag:'What we offer',sv_h2:'Our <em>Services</em>',see_more:'View services',
+    ring_lbl:'Years of practice\n& excellence',
+    t1:'Women\nserved',t2:'Natural &\npremium products',t3:'Positive\nreviews',
+    ab_tag:'Our world',ab_h2:'A salon designed<br/>just for <em>you</em>',
+    ab_body:'Salon Carmen is more than a hair salon. A warm, cosy and refined space, reserved exclusively for women.<br/><br/>Located in Beirut-Dora, I welcome you with a smile and all the expertise needed to bring out your beauty.',
+    f1l:'100% feminine space',f1d:'An intimate and caring setting, just for you.',
+    f2l:'Cosy atmosphere',f2d:'Soft lighting, marble décor, warm and elegant ambiance.',
+    f3l:'Premium products',f3d:'Only natural, high-quality hair care products.',
+    bk_tag:'Book online',bk_h2:'Make an <em>appointment</em>',
+    bk_sub:'In seconds, lock in your slot and let me take care of you.',
+    ph_name:'Your first name',ph_phone:'Your phone number',ph_date:'Choose a date',ph_time:'Choose a time',
+    bk_btn:'Book',bk_note:'Open Tuesday to Saturday · 10:30 – 17:00',fill_all:'Please fill in all fields.',
+    h_tag:'Hours',h_h:'When to<br/><em>find us</em>',
+    d0:'Monday',d1:'Tuesday',d2:'Wednesday',d3:'Thursday',d4:'Friday',d5:'Saturday',d6:'Sunday',closed:'Closed',
+    c_tag:'Our details',c_h:'Where & how<br/><em>to find us</em>',
+    c_al:'Address',c_av:'Beirut-Dora<br/>Notre Dame De La Paix Street<br/>Lebanon',
+    c_tl:'Phone · WhatsApp',c_el:'Email',map_btn:'📍 Open in Google Maps',
+    f_tag:'« Because every woman deserves to feel sublime. »',f_copy:'© 2025 Salon Carmen · All rights reserved'},
+  ar:{nav_svc:'خدماتنا',nav_ab:'من نحن',nav_bk:'حجز',nav_ct:'اتصال',
+    h_tag:'صالون تجميل نسائي',h_h1:'فن إبراز<br/><em>جمالك</em>',
+    h_sub:'مساحة مخصصة حصراً للمرأة، حيث كل تفصيل مصمم لراحتكِ.',
+    h_femme:'✦ أنشأته امرأة، للمرأة ✦',scroll:'تمرير',
+    sv_tag:'ما نقدمه',sv_h2:'<em>خدماتنا</em>',see_more:'عرض الخدمات',
+    ring_lbl:'سنوات من الخبرة\nوالتميز',
+    t1:'امرأة\nاستقبلتها',t2:'منتجات\nطبيعية وفاخرة',t3:'آراء\nإيجابية',
+    ab_tag:'عالمنا',ab_h2:'صالون مصمم<br/><em>لأجلكِ</em>',
+    ab_body:'صالون كارمن أكثر من مجرد صالون. مساحة دافئة ومريحة للمرأة فقط.<br/><br/>في بيروت-دورة، أستقبلكِ بابتسامة وكل خبرتي.',
+    f1l:'مساحة نسائية 100%',f1d:'بيئة حميمة ولطيفة، فقط لكِ.',
+    f2l:'أجواء مريحة',f2d:'إضاءة ناعمة، ديكور رخامي، أجواء دافئة.',
+    f3l:'منتجات فاخرة',f3d:'منتجات عناية طبيعية عالية الجودة فقط.',
+    bk_tag:'احجزي عبر الإنترنت',bk_h2:'<em>موعدكِ</em> بانتظاركِ',
+    bk_sub:'في ثوانٍ، احجزي وقتكِ ودعيني أعتني بكِ.',
+    ph_name:'اسمكِ الأول',ph_phone:'رقم هاتفكِ',ph_date:'اختاري تاريخاً',ph_time:'اختاري الوقت',
+    bk_btn:'احجزي',bk_note:'مفتوح من الثلاثاء إلى السبت · 10:30 – 17:00',fill_all:'يرجى ملء جميع الحقول.',
+    h_tag:'أوقات العمل',h_h:'متى<br/><em>نستقبلكِ</em>',
+    d0:'الإثنين',d1:'الثلاثاء',d2:'الأربعاء',d3:'الخميس',d4:'الجمعة',d5:'السبت',d6:'الأحد',closed:'مغلق',
+    c_tag:'معلوماتنا',c_h:'أين وكيف<br/><em>تجدوننا</em>',
+    c_al:'العنوان',c_av:'بيروت-دورة<br/>شارع مدرسة سيدة السلام<br/>لبنان',
+    c_tl:'هاتف · واتساب',c_el:'البريد الإلكتروني',map_btn:'📍 افتح في خرائط Google',
+    f_tag:'« لأن كل امرأة تستحق أن تشعر بجمالها. »',f_copy:'© 2025 صالون كارمن · جميع الحقوق محفوظة'}
+};
+
+function setLang(l,btn){
+  lang=l;
+  document.documentElement.lang=l;
+  document.documentElement.dir=l==='ar'?'rtl':'ltr';
+  document.querySelectorAll('.lang-opt').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  const t=i18n[l];
+  document.querySelectorAll('[data-i]').forEach(el=>{
+    const k=el.getAttribute('data-i');
+    if(t&&t[k]!=null)el.innerHTML=t[k].replace(/\n/g,'<br/>');
+  });
+  document.querySelectorAll('[data-ph]').forEach(el=>{
+    const k=el.getAttribute('data-ph');
+    if(t&&t[k])el.placeholder=t[k];
+  });
+  if(!dpSelected) document.getElementById('date-txt').textContent=t.ph_date;
+  if(!selectedHour) document.getElementById('hour-txt').textContent=t.ph_time;
+  buildTicker(l);
+}
+</script>
+</body>
+</html>
